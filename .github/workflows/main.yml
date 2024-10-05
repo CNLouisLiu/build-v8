@@ -12,13 +12,13 @@ defaults:
     shell: bash
 
 jobs:
-  build-windows_x64_MdD:
-    name: windows
+  build-windows_x64_MDd:
+    name: windows_x64_MDd
     runs-on: windows-latest
     strategy:
       fail-fast: false
       matrix:
-        platform: [x86_64(MdD)]
+        platform: [x86_64(MDd)]
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -64,5 +64,57 @@ jobs:
           asset_path: ${{ github.workspace }}/v8-lib-${{ matrix.platform }}-pc-windows-msvc.gz
           asset_name: v8-lib-${{ matrix.platform }}-pc-windows-msvc.gz
           asset_content_type: application/gzip
-          
+    
+  build-windows:
+    name: windows_x64_MD
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        platform: [x86_64(MD)]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Setup 7-zip
+        uses: milliewalky/setup-7-zip@v1
+      - name: Setup python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.10
+      - name: Setup msbuild
+        uses: microsoft/setup-msbuild@v1.0.2
+      - name: Fetch v8 code
+        shell: pwsh
+        run: |
+          git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
+          echo "$pwd/depot_tools" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+          echo "DEPOT_TOOLS_WIN_TOOLCHAIN=0" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+      - name: Checkout and sync
+        run: |
+          export DEPOT_TOOLS_WIN_TOOLCHAIN=0
+          gclient
+          fetch v8
+          cd v8
+          git checkout $V8_VERSION
+          gclient sync
+      - name: Build v8 static library
+        shell: pwsh
+        run: |
+          Set-Location -Path v8
+          New-Item -ItemType directory -Path ./out.gn/${{ matrix.platform }}.release/
+          Copy-Item "../windows-${{ matrix.platform }}.gn" -Destination "./out.gn/${{ matrix.platform }}.release/args.gn" -force          
+          gn gen out.gn/${{ matrix.platform }}.release
+          ninja -j 4  v8_monolith -C out.gn/${{ matrix.platform }}.release/
+      - name: Compress v8 static library
+        run: |
+          7z a -tgzip -mx=9 v8-lib-${{ matrix.platform }}-pc-windows-msvc.gz v8/out.gn/${{ matrix.platform }}.release/obj/v8_monolith.lib
+      - name: Upload v8 static library
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ${{ github.workspace }}/v8-lib-${{ matrix.platform }}-pc-windows-msvc.gz
+          asset_name: v8-lib-${{ matrix.platform }}-pc-windows-msvc.gz
+          asset_content_type: application/gzip
 
