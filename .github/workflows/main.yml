@@ -1,8 +1,6 @@
 name: Publish v8 include files and static library
 on:
-  release:
-    types:
-      - published
+  workflow_dispatch:
 
 env:
   V8_VERSION: "12.4.254.19"
