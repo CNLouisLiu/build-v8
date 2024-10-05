@@ -16,7 +16,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        platform: [x86_64(MDd)]
+        platform: [x86_64_MDd_]
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -69,7 +69,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        platform: [x86_64(MD)]
+        platform: [x86_64_MD_]
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
