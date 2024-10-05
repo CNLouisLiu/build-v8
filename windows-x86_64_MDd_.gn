@@ -54,7 +54,7 @@ v8_enable_builtins_optimization=true
 is_multithreaded=true
 # Add the following line to use MD runtime
 declare_args() {
-    // 其他已有的参数
-    cflags = [ "/MD" ]  // 使用多线程动态链接库
+    # 使用多线程动态链接库
+    cflags = [ "/MD" ]
     cflags_cc = [ "/MD" ]
 }
