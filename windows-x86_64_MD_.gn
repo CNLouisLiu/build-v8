@@ -15,7 +15,6 @@ is_clang=true
 use_custom_libcxx=false
 use_custom_libcxx_for_host=false
 use_gold=false
-is_debug=false
 treat_warnings_as_errors=false
 v8_enable_i18n_support=true
 symbol_level=0
@@ -54,5 +53,9 @@ v8_monolithic=true
 v8_enable_builtins_optimization=true
 is_multithreaded=true
 # Add the following line to use MD runtime
-cflags = [ "/MD" ]  # 在发布版本中，使用多线程动态链接库
-cflags_cc = [ "/MD" ]
+declare_args() {
+    // 其他已有的参数
+    cflags = [ "/MD" ]  // 使用多线程动态链接库
+    cflags_cc = [ "/MD" ]
+}
+
