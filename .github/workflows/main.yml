@@ -49,6 +49,8 @@ jobs:
           New-Item -ItemType directory -Path ./out.gn/${{ matrix.platform }}.release/
           Copy-Item "../windows-${{ matrix.platform }}.gn" -Destination "./out.gn/${{ matrix.platform }}.release/args.gn" -force     
           gn gen out.gn/${{ matrix.platform }}.release --args='cflags=[ "/MD" ] cflags_cc=[ "/MD" ]'
+          echo "Contents of args.gn:"
+          cat out.gn/${{ matrix.platform }}.release/
           ninja -j 4  v8_monolith -C out.gn/${{ matrix.platform }}.release/
       - name: Compress v8 static library
         run: |
@@ -60,7 +62,7 @@ jobs:
           path: ${{ github.workspace }}/v8-lib-${{ matrix.platform }}-pc-windows-msvc.gz
 
     
-  build-windows:
+  build-windows_x64_MD:
     name: windows_x64_MD
     runs-on: windows-latest
     strategy:
