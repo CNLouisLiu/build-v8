@@ -48,7 +48,7 @@ jobs:
           Set-Location -Path v8
           New-Item -ItemType directory -Path ./out.gn/${{ matrix.platform }}.release/
           Copy-Item "../windows-${{ matrix.platform }}.gn" -Destination "./out.gn/${{ matrix.platform }}.release/args.gn" -force     
-          gn gen out.gn/${{ matrix.platform }}.release --args="cflags=['/MD'] cflags_cc=['/MD']"
+          gn gen out.gn/${{ matrix.platform }}.release  --args="cflags=[\"/MD\"] cflags_cc=[\"/MD\"]"
           ninja -j 16 v8_monolith -C out.gn/${{ matrix.platform }}.release/
       - name: Compress v8 static library
         run: |
@@ -98,7 +98,7 @@ jobs:
           Set-Location -Path v8
           New-Item -ItemType directory -Path ./out.gn/${{ matrix.platform }}.release/
           Copy-Item "../windows-${{ matrix.platform }}.gn" -Destination "./out.gn/${{ matrix.platform }}.release/args.gn" -force       
-          gn gen out.gn/${{ matrix.platform }}.release --args="cflags=['/MD'] cflags_cc=['/MD']"
+          gn gen out.gn/${{ matrix.platform }}.release  --args="cflags=[\"/MD\"] cflags_cc=[\"/MD\"]"
           ninja -j 16 v8_monolith -C out.gn/${{ matrix.platform }}.release/
       - name: Compress v8 static library
         run: |
