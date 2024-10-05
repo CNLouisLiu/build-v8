@@ -53,15 +53,12 @@ jobs:
       - name: Compress v8 static library
         run: |
           7z a -tgzip -mx=9 v8-lib-${{ matrix.platform }}-pc-windows-msvc.gz v8/out.gn/${{ matrix.platform }}.release/obj/v8_monolith.lib
-      - name: Upload v8 static library
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
+      - name: Upload v8 static library as Artifact
+        uses: actions/upload-artifact@v3
         with:
-          upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ${{ github.workspace }}/v8-lib-${{ matrix.platform }}-pc-windows-msvc.gz
-          asset_name: v8-lib-${{ matrix.platform }}-pc-windows-msvc.gz
-          asset_content_type: application/gzip
+          name: v8-lib-${{ matrix.platform }}-pc-windows-msvc.gz
+          path: ${{ github.workspace }}/v8-lib-${{ matrix.platform }}-pc-windows-msvc.gz
+
     
   build-windows:
     name: windows_x64_MD
@@ -106,13 +103,9 @@ jobs:
       - name: Compress v8 static library
         run: |
           7z a -tgzip -mx=9 v8-lib-${{ matrix.platform }}-pc-windows-msvc.gz v8/out.gn/${{ matrix.platform }}.release/obj/v8_monolith.lib
-      - name: Upload v8 static library
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
+      - name: Upload v8 static library as Artifact
+        uses: actions/upload-artifact@v3
         with:
-          upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ${{ github.workspace }}/v8-lib-${{ matrix.platform }}-pc-windows-msvc.gz
-          asset_name: v8-lib-${{ matrix.platform }}-pc-windows-msvc.gz
-          asset_content_type: application/gzip
+          name: v8-lib-${{ matrix.platform }}-pc-windows-msvc.gz
+          path: ${{ github.workspace }}/v8-lib-${{ matrix.platform }}-pc-windows-msvc.gz
 
