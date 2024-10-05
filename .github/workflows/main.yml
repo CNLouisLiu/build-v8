@@ -49,6 +49,8 @@ jobs:
           New-Item -ItemType directory -Path ./out.gn/${{ matrix.platform }}.release/
           Copy-Item "../windows-${{ matrix.platform }}.gn" -Destination "./out.gn/${{ matrix.platform }}.release/args.gn" -force     
           gn gen out.gn/${{ matrix.platform }}.release
+          echo "Contents of build.ninja:"
+          Get-Content ./out.gn/${{ matrix.platform }}.release/build.ninja
           ninja -j 16 v8_monolith -C out.gn/${{ matrix.platform }}.release/
       - name: Compress v8 static library
         run: |
@@ -99,6 +101,8 @@ jobs:
           New-Item -ItemType directory -Path ./out.gn/${{ matrix.platform }}.release/
           Copy-Item "../windows-${{ matrix.platform }}.gn" -Destination "./out.gn/${{ matrix.platform }}.release/args.gn" -force       
           gn gen out.gn/${{ matrix.platform }}.release
+          echo "Contents of build.ninja:"
+          Get-Content ./out.gn/${{ matrix.platform }}.release/build.ninja
           ninja -j 16 v8_monolith -C out.gn/${{ matrix.platform }}.release/
       - name: Compress v8 static library
         run: |
